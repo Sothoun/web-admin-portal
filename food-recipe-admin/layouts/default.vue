@@ -9,8 +9,6 @@
           <Nuxt />
         </div>
       </v-main>
-
-      <Loading v-if="isDataLoading" />
     </v-layout>
   </v-app>
 </template>
@@ -27,7 +25,7 @@ export default {
   head() {
     return {
       htmlAttrs: {
-        lang: this.$i18n.locale,
+
       },
     };
   },

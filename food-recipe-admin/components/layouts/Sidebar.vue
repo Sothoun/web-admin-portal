@@ -1,6 +1,17 @@
 <template>
   <div id="sidebar">
     <v-navigation-drawer permanent clipped fixed app width="250">
+      <div class="container">
+        <v-img class="logo"
+        :src="`${require('~/assets/images/logo/logo.avif')}`
+        "
+        alt=""
+        max-width="50"
+        max-height="50"
+        contain
+      ></v-img>
+        <h4 class="app-title ml-3">{{ ('Food Recipe') }}</h4>
+      </div>
       <v-list expand nav dense>
         <template v-for="(item, i) in items">
           <!--Main Menu-->
@@ -27,7 +38,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .main-app-logo {
   cursor: pointer;
 }
@@ -44,11 +55,6 @@ export default {
   .sidebar-title {
     white-space: initial;
   }
-
-  //   .theme--light.v-navigation-drawer {
-  //     background-color: #000 !important;
-  //     color: white;
-  //   }
 
   .v-list-group--no-action > .v-list-group__items > .v-list-item {
     padding-left: 10px !important;
@@ -93,5 +99,18 @@ export default {
 }
 .item-nav-group-mini .v-list-item {
   padding-left: 25px !important;
+}
+.logo{
+  padding: 5px;
+  border-radius: 50%; /* Makes the image circular */
+            object-fit: cover;
+}
+
+.container{
+  display: flex;
+  font-weight: bolder;
+  align-items: center;
+  font-size: 25px;
+
 }
 </style>
