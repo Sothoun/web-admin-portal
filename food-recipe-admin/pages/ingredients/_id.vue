@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-5">
     <v-card>
-      <v-card-title>Create Category
+      <v-card-title>Update Ingredient
 
       </v-card-title>
       <v-row>
@@ -19,10 +19,10 @@
                     </label>
 
                     <v-text-field
-                      v-model="categories.name"
-                      :placeholder="'Name'"
+                      v-model="ingredients.name"
+                      :placeholder="Name"
                       v-bind="input_option"
-                      :rules="[required('Name')]"
+                      :rules="[required('name')]"
                       :error-messages="handleError('name')"
                     >
                     </v-text-field>
@@ -31,8 +31,8 @@
                     <label class="custom-label">Description</label>
                     <v-textarea
                       v-bind="input_option"
-                      v-model="categories.description"
-                      :placeholder="'Description'"
+                      v-model="ingredients.description"
+                      :placeholder="Description"
                       rows="3"
                     >
                     </v-textarea>
@@ -40,7 +40,7 @@
                   <v-col cols="12" class="mb-8">
                     <label class="custom-label">Status *</label>
                     <v-autocomplete
-                      v-model="categories.status"
+                      v-model="ingredients.status"
                       placeholder="Status"
                       :items="status_options"
                       v-bind="input_option"
@@ -71,10 +71,11 @@
   </div>
 </template>
 <script>
-import create from '@/js/pages/categories/create.js';
+import edit from '@/js/pages/ingredients/edit.js';
+import ingredients from '../../js/pages/ingredients';
 export default {
-  name: 'create',
-  mixins: [create],
+  name: 'edit',
+  mixins: [edit],
 };
 </script>
 <style scoped>

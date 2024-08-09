@@ -20,7 +20,9 @@ const global = {
   },
 
   computed: {
-
+    isDataLoading() {
+      return this.$store.state.loading;
+    },
 
   },
 
@@ -120,6 +122,14 @@ const global = {
         });
       }
       return filterString;
+    },
+
+    hasErrorFor(field) {
+      return !!this.error_messages[field];
+    },
+
+    handleError(field) {
+      if (this.hasErrorFor(field)) return this.error_messages[field][0];
     },
 
     isSuperAdmin() {

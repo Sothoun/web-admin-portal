@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-5">
     <v-card>
-      <v-card-title>Create Category
+      <v-card-title>Update Category
 
       </v-card-title>
       <v-row>
@@ -20,9 +20,9 @@
 
                     <v-text-field
                       v-model="categories.name"
-                      :placeholder="'Name'"
+                      :placeholder="Name"
                       v-bind="input_option"
-                      :rules="[required('Name')]"
+                      :rules="[required(categories.name)]"
                       :error-messages="handleError('name')"
                     >
                     </v-text-field>
@@ -32,7 +32,7 @@
                     <v-textarea
                       v-bind="input_option"
                       v-model="categories.description"
-                      :placeholder="'Description'"
+                      :placeholder="Description"
                       rows="3"
                     >
                     </v-textarea>
@@ -71,10 +71,10 @@
   </div>
 </template>
 <script>
-import create from '@/js/pages/categories/create.js';
+import edit from '@/js/pages/categories/edit.js';
 export default {
-  name: 'create',
-  mixins: [create],
+  name: 'edit',
+  mixins: [edit],
 };
 </script>
 <style scoped>

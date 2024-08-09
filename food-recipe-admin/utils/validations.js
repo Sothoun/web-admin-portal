@@ -1,8 +1,8 @@
 // import { isEmpty, isEmptyArray, isNullOrUndefined } from './index';
 
 // Required Validator
-const required = (propertyType = 'Field') => {
-  return (v) => (v && !!v) || `${propertyType} is required.`;
+const required = (value) =>{
+  return v => !!v || `${value} is required`;
 };
 
 // Required With Select Multiple
