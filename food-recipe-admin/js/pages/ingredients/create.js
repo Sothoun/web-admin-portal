@@ -1,4 +1,4 @@
-import ingredients from ".";
+
 
 export default {
 

@@ -22,6 +22,11 @@ export default {
           icon: 'mdi-view-dashboard',
           title: 'Recipe',
           to: 'recipes'
+        },
+        {
+          icon:'mdi-view-dashboard',
+          title: 'Users',
+          to: 'users'
         }
 
       ],

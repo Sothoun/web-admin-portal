@@ -1,5 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
-
+import toast from './config/toast';
 export default {
     css: [
       '~/assets/styles/main.css'
@@ -41,12 +41,18 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/toast',
+    '@nuxtjs/axios',
+    '@nuxt/http',
   ],
 
+  /* MESSAGE */
+  toast: toast,
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],

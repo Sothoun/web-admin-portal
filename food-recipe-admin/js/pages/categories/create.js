@@ -15,8 +15,6 @@ export default {
       valid: true,
       categories: {
         name: null,
-        description: null,
-        status: 'Active',
       },
       status_options: ['Active', 'Inactive'],
     };
@@ -37,14 +35,27 @@ export default {
   methods: {
     async submit() {
       if (this.$refs.form.validate()) {
-        // const res = await this.$api.productCategory.create(this.formData);
-        if (res.success === false) {
-          this.$toast.error(res.message);
-          this.error_messages = res.data;
-        } else {
-          this.$toast.success(res.message);
-          this.error_messages = [];
-          this.resetForm();
+        const data = {
+          name: this.categories.name,
+        };
+
+        try {
+          const token = localStorage.getItem('token')
+          const res = await fetch('http://localhost:8000/categories', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+          });
+
+          if (res.ok) {
+            this.$toast.success("Created success!");
+            this.$router.push('/categories')
+          }
+        } catch (error) {
+          this.$toast.error("An error occurred. Please try again.");
         }
       }
     },

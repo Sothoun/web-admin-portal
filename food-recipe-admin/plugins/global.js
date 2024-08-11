@@ -34,82 +34,9 @@ const global = {
       return Object.keys(object).length;
     },
     // call data table
-    getDataFromApi(url, search, filter, isFilter) {
-      this.getDataTableData(url, search, filter, isFilter).then((data) => {
-        this.table_options.table_data = data.items;
-        this.table_options.total_items = data.total;
-      });
-    },
+
 
     // data table
-    getDataTableData(url, search, filter, isFilter = false) {
-      return new Promise((resolve, reject) => {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-
-        let param = '';
-
-        if (filter) {
-          param = Object.keys(filter)
-            .map(function (key) {
-              let val = filter[key] != null ? filter[key] : '';
-              return key + '=' + val;
-            })
-            .join('&');
-        }
-
-        const axiosSource = this.$axios.CancelToken.source();
-        this.request = { cancel: axiosSource.cancel, msg: 'Loading...' };
-
-        let items = [];
-        let total = 0;
-
-        this.$axios
-          .$get(
-            `${process.env.API_SECRET_PREFIX}/${url}?page=${isFilter ? 1 : page}&per_page=${itemsPerPage}&search=${
-              search ? search : ''
-            }${param ? '&' + param : ''}`,
-            {
-              cancelToken: axiosSource.token,
-            }
-          )
-          .then((response) => {
-            if (response) {
-              this.$router.push({
-                query: {
-                  page: page,
-                  length: itemsPerPage == -1 ? response.meta.total : itemsPerPage,
-                  search: this.search,
-                  filter: filter ? JSON.stringify(filter) : '',
-                },
-              });
-
-              items = response.data;
-              total = response.meta.total;
-
-              if (sortBy.length === 1 && sortDesc.length === 1) {
-                items = items.sort((a, b) => {
-                  let sortA = a[sortBy[0]];
-                  let sortB = b[sortBy[0]];
-
-                  if (sortDesc[0]) {
-                    if (sortA < sortB) return 1;
-                    if (sortA > sortB) return -1;
-                    return 0;
-                  } else {
-                    if (sortA < sortB) return -1;
-                    if (sortA > sortB) return 1;
-                    return 0;
-                  }
-                });
-              }
-              resolve({ items, total });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      });
-    },
 
     // covert data filter to string
     generateFilterString(dataFilter) {

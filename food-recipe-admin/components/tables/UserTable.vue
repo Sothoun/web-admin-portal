@@ -29,7 +29,11 @@
       :items="table_options.table_data"
       :options.sync="options"
       :page.sync="table_options.page"
-      :items-per-page.sync="table_options.length"
+      :footer-props="{
+        showFirstLastPage: true,
+        'items-per-page-options': table_item_per_page,
+      }"
+      :items-per-page="15"
       :server-items-length="table_options.total_items"
       fixed-header
       height="calc(100vh - 230px)"
@@ -37,18 +41,18 @@
       @page-count="table_options.page_count = $event"
     >
 
-      <template v-slot:item.index="{ item }">
+      <template v-slot:[`item.index`]="{ item }">
         {{ table_options.table_data.indexOf(item) + 1 + (table_options.page - 1) * table_options.length }}
       </template>
 
-      <template v-slot:item.status="{ item }">
+      <template v-slot:[`item.status`]="{ item }">
         <v-chip small :color="item.status == 'Active' ? 'primary' : ''">
           <v-icon left small>{{ item.status == 'Active' ? 'mdi-check-circle' : 'mdi-close-circle' }}</v-icon>
           {{ item.status }}
         </v-chip>
       </template>
 
-      <template v-slot:item.action="{ item }">
+      <template v-slot:[`item.action`]="{ item }">
         <div class="table-action-container">
           <v-menu offset-y left>
             <template v-slot:activator="{ attrs, on }">
@@ -82,7 +86,7 @@
         </div>
       </template>
 
-      <template v-slot:footer.prepend>
+      <template v-slot:[`footer.prepend`]>
         <v-pagination v-model="table_options.page" :length="table_options.page_count" :total-visible="7"></v-pagination>
       </template>
     </v-data-table>
@@ -95,7 +99,6 @@
 
 <script>
 import ConfirmDelete from '@/components/alerts/ConfirmDelete';
-
 export default {
   components: {
     ConfirmDelete,
@@ -105,22 +108,24 @@ export default {
     return {
       table_options: {
         headers: [
-          { text: '#', value: 'index', width: '50px', sortable: false },
-          { text: 'Name', value: 'name', width:'300px', align:'center', sortable: true },
-          { text: 'Action', value: 'action', width:'20px', align:'left',sortable: false },
+          { text: '#', value: 'index', width: '32px', sortable: false },
+          { text: 'Image', value: 'image', width: '60px', sortable: false },
+          { text: 'Name', value: 'name', sortable: true },
+          { text: 'Status', value: 'status', sortable: false },
+          { text: 'Action', value: 'action', sortable: false },
         ],
+        url: 'products/categories',
         page: 1,
-        length: 50,
+        length: 15,
         page_count: 0,
         table_data: [],
         total_items: 0,
-        url: `http://localhost:8000/categories`,
       },
       options: {},
       search: '',
       show_filter: false,
       inputTimer: '',
-      selected: [],
+      selected:[],
       valid: true,
       file_xlsx: null,
       dialog: false,
@@ -138,27 +143,25 @@ export default {
     },
   },
 
+  watch: {
+    options: {
+      handler() {
+        this.getDataFromApi(this.table_options.url, this.searchInput, this.old_filter);
+      },
+      deep: true,
+    },
+  },
+
   methods: {
     async deleteData(id) {
       if (await this.$refs.confirm.open()) {
-        try {
-          const token = localStorage.getItem('token')
-          const res = await fetch(`http://localhost:8000/categories/${id}`, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-          });
-
-          if (res.ok) {
-            this.$toast.success("Category have been delete success!");
-            this.getCategoryList();
-          }
-        } catch (error) {
-          this.$toast.error("An error occurred. Please try again.");
+        const res = await this.$api.productCategory.delete(id);
+        if (res.statusCode == 400) {
+          this.$toast.error(res.error);
+        } else {
+          this.$toast.success(res.message);
+          this.getDataFromApi(this.table_options.url);
         }
-
       }
     },
 
@@ -169,7 +172,7 @@ export default {
       }
       this.inputTimer = setTimeout(() => {
         this.getDataFromApi(this.table_options.url, this.search, (this.isFilter = true));
-      }, 800);
+      }, '800');
     },
 
     onClearSearch() {
@@ -177,57 +180,20 @@ export default {
       this.getDataFromApi(this.table_options.url, this.searchInput);
     },
 
-    async getCategoryList() {
-      try {
-        const token = localStorage.getItem('token');
-
-        const res = await fetch(`${this.table_options.url}?page=${this.table_options.page}&pageSize=${this.table_options.length}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          this.table_options.table_data = data.category.data;
-          this.table_options.total_items = data.category.total_items; // Assuming your API provides this
-          this.table_options.page_count = Math.ceil(this.table_options.total_items / this.table_options.length); // Calculate total pages
-        } else {
-          throw new Error('Failed to fetch categories');
-        }
-      } catch (err) {
-        console.error('Error fetching categories:', err);
-      }
-    },
   },
-
-  watch: {
-    'table_options.page'(newPage) {
-      this.getCategoryList();
-    },
-    'table_options.length'(newLength) {
-      this.getCategoryList();
-    }
-  },
-
-  created() {
-    this.getCategoryList();
-  }
 };
 </script>
-
-
 <style scoped>
-  .data-table {
+  .data-table{
     background-color: #323232;
   }
 
-  .search-create {
+  .search-create{
     text-align: right;
     padding: 5px;
   }
 
-  .contain-search {
-    margin-top: 30px;
-  }
+.contain-search{
+  margin-top:30px ;
+}
 </style>

@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <v-layout>
-      <Header :submitForm="logout" />
-      <Sidebar />
+      <Header v-if="loggedIn" :submitForm="logout" />
+      <Sidebar v-if="loggedIn"/>
 
       <v-main class="main-content">
         <div class="content">
@@ -22,6 +22,7 @@ import Header from '@/components/layouts/Header';
 export default {
   name: 'DefaultLayout',
   components: { Sidebar, Header },
+
   head() {
     return {
       htmlAttrs: {
@@ -36,6 +37,7 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      loggedIn: null,
       items: [
         {
           icon: 'mdi-apps',
@@ -55,6 +57,10 @@ export default {
     };
   },
 
+  mounted(){
+    this.getToken();
+  },
+
   methods: {
     async logout() {
       try {
@@ -65,7 +71,12 @@ export default {
         console.log(err);
       }
     },
+
+    getToken(){
+      this.loggedIn =  localStorage.getItem('token');
+    }
   },
+
 };
 </script>
 

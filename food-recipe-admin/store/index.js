@@ -1,45 +1,24 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-Vue.use(Vuex);
+// store/index.js
 
-// export store module
-export default () =>
-  new Vuex.Store({
-    state: {
-      mini_sidebar: false,
-      dark_mode: false,
-      loading: false,
-      setup_system: {
-        general_info: {},
-      },
-      is_customer_screen_opened: false,
-      products: [],
-      page_title: null,
-      languages: [],
-      exchange_rates: [],
-    },
+export const state = () => ({
+  auth: {
+    loggedIn: false
+  }
+});
 
-    // to handle state
-    getters: {
+export const mutations = {
+  SET_LOGGED_IN(state, status) {
+    state.auth.loggedIn = status;
+  }
+};
 
-
-      isDataLoading(state) {
-        return state.loading;
-      },
-
-    },
-
-    // to handle actions
-    actions: {
-
-    },
-
-    // to handle mutations
-    mutations: {
-
-
-      setIsDataLoading(state, payload) {
-        state.loading = payload;
-      },
-    },
-  });
+export const actions = {
+  login({ commit }) {
+    // Simulate a login action
+    commit('SET_LOGGED_IN', true);
+  },
+  logout({ commit }) {
+    // Simulate a logout action
+    commit('SET_LOGGED_IN', false);
+  }
+};
