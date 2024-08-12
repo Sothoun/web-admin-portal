@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <v-layout>
-      <Header v-if="loggedIn" :submitForm="logout" />
-      <Sidebar v-if="loggedIn"/>
+      <Header v-if="!route" :submitForm="logout" />
+      <Sidebar v-if="!route"/>
 
       <v-main class="main-content">
         <div class="content">
@@ -22,62 +22,38 @@ import Header from '@/components/layouts/Header';
 export default {
   name: 'DefaultLayout',
   components: { Sidebar, Header },
-
-  head() {
-    return {
-      htmlAttrs: {
-
-      },
-    };
-  },
-
+  middleware: ['auth'],
   data() {
     return {
-      is_already_online: true,
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      loggedIn: null,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/',
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
-        },
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js',
+      loggedIn: false, // Default to false and update on created
+      // Other data properties
     };
   },
-
-  mounted(){
-    this.getToken();
+  created() {
+    this.getToken(); // Set initial loggedIn state
   },
-
+  computed: {
+    route() {
+      return this.$route.name === 'login'
+    }
+  },
   methods: {
     async logout() {
       try {
-        await this.$auth.logout();
-        localStorage.clear();
+        localStorage.removeItem('token'); // Clear token
+        this.loggedIn = false; // Update state
         this.$router.push('/login');
       } catch (err) {
-        console.log(err);
+        console.error('Logout failed', err);
       }
     },
-
-    getToken(){
-      this.loggedIn =  localStorage.getItem('token');
+    getToken() {
+      const token = localStorage.getItem('token');
+      this.loggedIn = !!token; // Set loggedIn based on token presence
     }
-  },
-
+  }
 };
+
 </script>
 
 <style lang="scss">

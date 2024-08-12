@@ -21,12 +21,31 @@
         </template>
       </v-menu>
     </div>
+    <div>
+      <v-icon @click="logout()">mdi-login-variant</v-icon>
+    </div>
     </div>
 </template>
 
 <script>
 export default {
-  name: 'Header'
+  name: 'Header',
+  data(){
+    return{
+
+    }
+  },
+  methods:{
+    logout() {
+      try {
+        localStorage.removeItem('token');
+        this.loggedIn = false;
+        this.$router.push('/login')
+      } catch (err) {
+        console.error('Logout failed', err);
+      }
+    },
+  }
 }
 </script>
 

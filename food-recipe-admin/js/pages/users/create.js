@@ -1,37 +1,40 @@
 
 export default {
+
+
   middleware: ['auth'],
 
   head() {
     return {
-      titleTemplate: 'CREATE INGREDIENT',
+      titleTemplate: 'CREATE USERS',
     };
   },
   data() {
     return {
       error_messages: [],
       valid: true,
-      ingredients: {
-        name: null,
+      show_password: false,
+      users: {
+        username: null,
+        email: null,
+        password: null,
       },
       status_options: ['Active', 'Inactive'],
     };
-  },
-
-  computed: {
-
   },
 
   methods: {
     async submit() {
       if (this.$refs.form.validate()) {
         const data = {
-          name: this.ingredients.name,
+          username: this.users.username,
+          email: this.users.email,
+          password: this.users.password,
         };
 
         try {
           const token = localStorage.getItem('token')
-          const res = await fetch('http://localhost:8000/ingredient', {
+          const res = await fetch('http://localhost:8000/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -41,15 +44,14 @@ export default {
           });
 
           if (res.ok) {
-            this.$toast.success("Ingredient have been create success!");
-            this.$router.push('/ingredients');
+            this.$toast.success("User have been success!");
+            this.$router.push('/users');
           }
         } catch (error) {
           this.$toast.error("An error occurred. Please try again.");
         }
       }
     },
-
   },
 
   created() {

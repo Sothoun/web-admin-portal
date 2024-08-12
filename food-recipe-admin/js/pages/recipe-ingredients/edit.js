@@ -6,7 +6,7 @@ export default {
 
   head() {
     return {
-      titleTemplate: 'EDIT INGREDIENT',
+      titleTemplate: 'EDIT RECIPE INGREDIENT',
     };
   },
   data() {

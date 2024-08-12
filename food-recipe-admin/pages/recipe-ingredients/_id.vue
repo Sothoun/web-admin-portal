@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-5">
     <v-card>
-      <v-card-title>Create Ingredient
+      <v-card-title>Update Ingredient
 
       </v-card-title>
       <v-row>
@@ -20,9 +20,9 @@
 
                     <v-text-field
                       v-model="ingredients.name"
-                      :placeholder="'Name'"
+                      :placeholder="Name"
                       v-bind="input_option"
-                      :rules="[required('Name')]"
+                      :rules="[required('name')]"
                       :error-messages="handleError('name')"
                     >
                     </v-text-field>
@@ -51,11 +51,10 @@
   </div>
 </template>
 <script>
-import create from '@/js/pages/ingredients/create.js';
-import ingredients from '../../js/pages/ingredients';
+import edit from '@/js/pages/recipe-ingredients/edit.js';
 export default {
-  name: 'create',
-  mixins: [create],
+  name: 'edit',
+  mixins: [edit],
 };
 </script>
 <style scoped>

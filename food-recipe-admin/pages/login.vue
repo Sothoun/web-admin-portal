@@ -34,6 +34,7 @@
                     <v-text-field
                       v-model="password"
                       :placeholder="'Password'"
+                      type="password"
                       v-bind="input_option"
                       :rules="[required('Password')]"
                     >
@@ -52,6 +53,11 @@
 </template>
 <script>
   export default{
+  head() {
+    return {
+      titleTemplate: 'LOGIN',
+    };
+  },
   data() {
     return {
       username: '',
@@ -63,7 +69,13 @@
     loggedIn() {
       return this.$store.state.auth.loggedIn;
     },
-
+  },
+  watch: {
+    loggedIn() {
+      if (this.$store.state.auth.loggedIn) {
+        this.$router.push('/categories');
+      }
+    }
   },
   methods: {
     async submit() {
@@ -82,13 +94,13 @@
             body: JSON.stringify(data)
           });
 
+          console.log({ res })
           if (res.ok) {
             const data = await res.json();
-            console.log(data);
             this.$toast.success("Login success!");
             this.$store.commit('SET_LOGGED_IN', true);
             this.$router.push('/categories');
-            localStorage.setItem('token', data.token)
+            localStorage.setItem('token', data.token);
           } else {
             this.$toast.error("Invalid username or password");
             this.$router.push('/login');
@@ -97,8 +109,12 @@
           this.$toast.error("An error occurred. Please try again.");
         }
       }
+    },
+    reloadPage() {
+      this.$router.replace(this.$route.path);
     }
-  }
+  },
+
 }
 </script>
 

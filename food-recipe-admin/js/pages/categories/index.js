@@ -4,7 +4,7 @@ export default {
   meta: {
   },
 
-//  middleware: ['auth'],
+  middleware: ['auth'],
 
   head() {
     return {
@@ -17,6 +17,5 @@ export default {
   data() {
     return {};
   },
-
 
 };

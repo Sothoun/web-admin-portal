@@ -16,7 +16,7 @@
               class="ml-2"
               outlined
               color="primary"
-              :to="'/users/create'"
+              :to="'/recipe-ingredients/create'"
             >
               <v-icon left>mdi-plus-circle</v-icon>
               Create
@@ -48,7 +48,7 @@
         </v-chip>
       </template>
 
-      <!-- <template v-slot:item.action="{ item }">
+      <template v-slot:item.action="{ item }">
         <div class="table-action-container">
           <v-menu offset-y left>
             <template v-slot:activator="{ attrs, on }">
@@ -60,7 +60,7 @@
             <v-list dense nav width="180">
               <v-list-item
                 link
-                :to="`/users/${item.id}`"
+                :to="`/ingredients/${item.id}`"
               >
                 <v-list-item-icon>
                   <v-icon size="15">mdi-pencil</v-icon>
@@ -80,7 +80,7 @@
             </v-list>
           </v-menu>
         </div>
-      </template> -->
+      </template>
 
       <template v-slot:footer.prepend>
         <v-pagination v-model="table_options.page" :length="table_options.page_count" :total-visible="7"></v-pagination>
@@ -106,16 +106,18 @@ export default {
       table_options: {
         headers: [
           { text: '#', value: 'index', width: '50px', sortable: false },
-          { text: 'Name', value: 'username', width:'300px', align:'center', sortable: true },
-          { text: 'Email', value: 'email', width:'300px', align:'center', sortable: true },
-          // { text: 'Action', value: 'action', width:'20px', align:'left',sortable: false },
+          { text: 'Title', value: 'title', width:'300px', align:'center', sortable: true },
+          { text: 'Ingredient', value: 'ingredient', width:'300px', align:'center', sortable: true },
+          { text: 'Quantity', value: 'quantity', width:'20px', align:'center', sortable: true },
+          { text: 'Unit', value: 'unit', width:'30px', align:'center', sortable: true },
+          { text: 'Action', value: 'action', width:'20px', align:'left',sortable: false },
         ],
         page: 1,
         length: 50,
         page_count: 0,
         table_data: [],
         total_items: 0,
-        url: `http://localhost:8000/user`,
+        url: `http://localhost:8000/recipe-ingredient`,
       },
       options: {},
       search: '',
@@ -143,8 +145,8 @@ export default {
     async deleteData(id) {
       if (await this.$refs.confirm.open()) {
         try {
-          const token = localStorage.getItem('token')
-          const res = await fetch(`http://localhost:8000/users/${id}`, {
+          const token = localStorage.getItem('token');
+          const res = await fetch(`http://localhost:8000/recipe-ingredient/${id}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -153,8 +155,8 @@ export default {
           });
 
           if (res.ok) {
-            this.$toast.success("Category have been delete success!");
-            this.getCategoryList();
+            this.$toast.success("Ingredient have been delete success!");
+            this.getData();
           }
         } catch (error) {
           this.$toast.error("An error occurred. Please try again.");
@@ -178,7 +180,7 @@ export default {
       this.getDataFromApi(this.table_options.url, this.searchInput);
     },
 
-    async getCategoryList() {
+    async getData() {
       try {
         const token = localStorage.getItem('token');
 
@@ -190,29 +192,29 @@ export default {
 
         if (res.ok) {
           const data = await res.json();
-          this.table_options.table_data = data.users.data;
-          this.table_options.total_items = data.users.total_items; // Assuming your API provides this
+          this.table_options.table_data = data.recipeIngredient.data;
+          this.table_options.total_items = data.recipeIngredient.total_items; // Assuming your API provides this
           this.table_options.page_count = Math.ceil(this.table_options.total_items / this.table_options.length); // Calculate total pages
         } else {
-          throw new Error('Failed to fetch categories');
+          throw new Error('Failed to fetch ingredients');
         }
       } catch (err) {
-        console.error('Error fetching categories:', err);
+        console.error('Error fetching ingredients:', err);
       }
     },
   },
 
   watch: {
     'table_options.page'(newPage) {
-      this.getCategoryList();
+      this.getData();
     },
     'table_options.length'(newLength) {
-      this.getCategoryList();
+      this.getData();
     }
   },
 
   created() {
-    this.getCategoryList();
+    this.getData();
   }
 };
 </script>
@@ -229,7 +231,7 @@ export default {
   }
 
   .contain-search {
-    margin-top: 70px;
+    margin-top: 30px;
     display: flex;
     justify-content: space-between;
     padding: 10px;

@@ -9,24 +9,29 @@ export default {
           to: '/',
         },
         {
-          icon: 'mdi-view-dashboard',
+          icon: 'mdi-note-multiple-outline',
           title: 'Category',
           to: '/categories',
         },
         {
-          icon: 'mdi-view-dashboard',
+          icon: 'mdi-arrange-send-to-back',
           title: 'Ingredient',
           to: '/ingredients'
         },
         {
-          icon: 'mdi-view-dashboard',
+          icon: 'mdi-code-string',
           title: 'Recipe',
-          to: 'recipes'
+          to: '/recipes'
         },
         {
-          icon:'mdi-view-dashboard',
+          icon: 'mdi-arrange-bring-forward',
+          title: 'Recipe Ingredient',
+          to: '/recipe-ingredients'
+        },
+        {
+          icon:'mdi-account-multiple',
           title: 'Users',
-          to: 'users'
+          to: '/users'
         }
 
       ],

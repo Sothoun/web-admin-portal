@@ -228,6 +228,13 @@ export default {
   }
 
   .contain-search {
-    margin-top: 30px;
+    margin-top: 70px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: center;
+  }
+  .table-search{
+    border: solid 2px black;
   }
 </style>

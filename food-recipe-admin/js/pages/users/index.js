@@ -4,7 +4,7 @@ export default {
   meta: {
   },
 
-  // middleware: ['auth', 'user-permission'],
+  middleware: ['auth'],
 
   head() {
     return {
